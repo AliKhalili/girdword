@@ -29,7 +29,8 @@ class Frame:
             plt.axis('off')
             plt.show()
 
-    def save(self, name: str):
+    def save(self, *args, **kwargs):
+        name = kwargs.get('name', None)
         fig, ax = plt.subplots()
         im = ax.imshow(self._frame[0], cmap=self._cmap, norm=self._norm)
         update = lambda i: im.set_array(self._frame[i])
