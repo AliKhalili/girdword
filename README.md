@@ -34,7 +34,18 @@ environment.step('D')
 environment.step('D')
 environment.save()
 ```
-
 <p  align="center">
 <img src="/doc/img/cliff.gif" />
+</p>
+
+# Q-Learning
+```python
+environment = MDPGrid(json_path=os.path.join(os.getcwd(), f'../env/cliff.json'))
+learner = QLearning(environment, discount_factor=gamma, exploration_rate=epsilon, step_size=alpha)
+learner.run(number_of_episode)
+learner.evaluation()
+environment.save()
+```
+<p  align="center">
+<img src="/doc/img/cliff-q.gif" />
 </p>
