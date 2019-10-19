@@ -1,0 +1,11 @@
+{
+  "width": 7,
+  "height": 1,
+  "save_frame": true,
+  "reward": 0,
+  "states": {
+    "5": {"R": [1,"_"]},
+    "3": {"start":true},
+    "0,6": {"terminal": true}
+  }
+}
