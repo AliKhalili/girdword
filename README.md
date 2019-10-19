@@ -36,5 +36,5 @@ environment.save()
 ```
 
 <p  align="center">
-<img src="/doc/img/cliff.gif" width="200" />
+<img src="/doc/img/cliff.gif" />
 </p>
