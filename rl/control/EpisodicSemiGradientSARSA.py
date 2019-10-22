@@ -12,6 +12,7 @@ class EpisodicSemiGradientSARSA(BaseControl):
         self.exploration_rate = exploration_rate
         self.step_size = step_size
         self.weight = np.zeros((env.action_space, tiling.tile_size()))
+        self.tiling = tiling
 
     def run(self, number_of_episode):
         runs = {}
@@ -31,3 +32,6 @@ class EpisodicSemiGradientSARSA(BaseControl):
         self.PI = np.argmax(self.Q, axis=1)
         super().save_model()
         return runs
+
+    def get_action_value(self, state, action):
+        self.tiling.encode(state)

@@ -14,6 +14,7 @@ class Tiling:
         self._tiling = {}
         self._tiling_states = {}
         self._one_hot = {}
+        self._tiles = {}
         self._create_tilings()
 
     def _create_tiling_grid(self, tiling_index):
@@ -25,9 +26,11 @@ class Tiling:
         return grid
 
     def _create_tilings(self):
-        self._tiling = {tiling_index: self.create_tiling_grid(tiling_index) for tiling_index in range(self._number_of_tiling)}
+        self._tiling = {tiling_index: self._create_tiling_grid(tiling_index) for tiling_index in
+                        range(self._number_of_tiling)}
         self._tiling_states = {
-            tiling_index: np.arange((grid[0].shape[0] - 1) * (grid[1].shape[0] - 1)).reshape((grid[0].shape[0] - 1, grid[1].shape[0] - 1))
+            tiling_index: np.arange((grid[0].shape[0] - 1) * (grid[1].shape[0] - 1)).reshape(
+                (grid[0].shape[0] - 1, grid[1].shape[0] - 1))
             for
             tiling_index, grid in
             self._tiling.items()}
@@ -39,18 +42,23 @@ class Tiling:
                 states = self._tile_encode(x, y)
                 one_hot[np.arange(self._number_of_tiling), states] = 1
                 self._one_hot[(x, y)] = one_hot
+                self._tiles[(x, y)] = states
 
     def _tile_encode(self, x, y):
         return np.array(
-            [self._tiling_states[tiling_index][int(np.digitize(x, grid[0])) - 1, int(np.digitize(y, grid[1])) - 1] for tiling_index, grid
+            [self._tiling_states[tiling_index][int(np.digitize(x, grid[0])) - 1, int(np.digitize(y, grid[1])) - 1] for
+             tiling_index, grid
              in
              self._tiling.items()])
 
     def tile_size(self):
         return self._one_hot.shape[1]
 
-    def encode(self, x, y):
+    def ont_hot(self, x, y):
         return self._one_hot[(x, y)]
+
+    def tiles(self, x, y):
+        return self._tiles[(x, y)]
 
     def visualize_tilings(self):
         """Plot each tiling as a grid."""
