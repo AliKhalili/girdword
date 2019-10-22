@@ -9,7 +9,7 @@ class BaseControl(ABC):
         self.state_space = env.observation_space.n
         self.discount_factor = discount_factor
         self.PI = np.random.randint(0, self.action_space, size=self.state_space)
-        self.Q = np.zeros((self.state_space, self.action_space))
+        self.Q = np.zeros((self.action_space, self.action_space))
         self.env = env
 
     def run(self, number_of_run):

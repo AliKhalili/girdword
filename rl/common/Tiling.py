@@ -14,8 +14,9 @@ class Tiling:
         self._tiling = {}
         self._tiling_states = {}
         self._one_hot = {}
+        self._create_tilings()
 
-    def create_tiling_grid(self, tiling_index):
+    def _create_tiling_grid(self, tiling_index):
         assert self._offset_x + tiling_index <= 0, "x offset can not be greater than zero"
         assert self._offset_y + tiling_index <= 0, "y offset can not be greater than zero"
         grid_x = np.arange(0, self._width + self._bin + 1, self._bin) + self._offset_x + tiling_index
@@ -23,7 +24,7 @@ class Tiling:
         grid = np.array([np.unique(np.clip(grid_x, 0, self._width)), np.unique(np.clip(grid_y, 0, self._height))])
         return grid
 
-    def create_tilings(self):
+    def _create_tilings(self):
         self._tiling = {tiling_index: self.create_tiling_grid(tiling_index) for tiling_index in range(self._number_of_tiling)}
         self._tiling_states = {
             tiling_index: np.arange((grid[0].shape[0] - 1) * (grid[1].shape[0] - 1)).reshape((grid[0].shape[0] - 1, grid[1].shape[0] - 1))
@@ -44,6 +45,9 @@ class Tiling:
             [self._tiling_states[tiling_index][int(np.digitize(x, grid[0])) - 1, int(np.digitize(y, grid[1])) - 1] for tiling_index, grid
              in
              self._tiling.items()])
+
+    def tile_size(self):
+        return self._one_hot.shape[1]
 
     def encode(self, x, y):
         return self._one_hot[(x, y)]
