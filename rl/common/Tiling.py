@@ -11,20 +11,42 @@ class Tiling:
         self._number_of_tiling = number_of_tilling
         self._bin = bin
         self._offset_x, self._offset_y = offset
-        self._tiling = []
+        self._tiling = {}
+        self._tiling_states = {}
+        self._one_hot = {}
 
     def create_tiling_grid(self, tiling_index):
+        assert self._offset_x + tiling_index <= 0, "x offset can not be greater than zero"
+        assert self._offset_y + tiling_index <= 0, "y offset can not be greater than zero"
         grid_x = np.arange(0, self._width + self._bin + 1, self._bin) + self._offset_x + tiling_index
         grid_y = np.arange(0, self._height + self._bin + 1, self._bin) + self._offset_y + tiling_index
-        grid = np.array([np.clip(grid_x, 0, self._width), np.clip(grid_y, 0, self._height)])
+        grid = np.array([np.unique(np.clip(grid_x, 0, self._width)), np.unique(np.clip(grid_y, 0, self._height))])
         return grid
 
     def create_tilings(self):
-        self._tiling = [self.create_tiling_grid(tiling_index) for tiling_index in range(self._number_of_tiling)]
+        self._tiling = {tiling_index: self.create_tiling_grid(tiling_index) for tiling_index in range(self._number_of_tiling)}
+        self._tiling_states = {
+            tiling_index: np.arange((grid[0].shape[0] - 1) * (grid[1].shape[0] - 1)).reshape((grid[0].shape[0] - 1, grid[1].shape[0] - 1))
+            for
+            tiling_index, grid in
+            self._tiling.items()}
 
-    def tile_encode(self, x, y):
-        zero = np.zeros(self._width, self._height)
-        return [(int(np.digitize(x, grid[0])) - 1, int(np.digitize(y, grid[1])) - 1) for grid in self._tiling]
+        max_len = max([items.size for key, items in self._tiling_states.items()])
+        for x in range(self._width):
+            for y in range(self._height):
+                one_hot = np.zeros((self._number_of_tiling, max_len), dtype=int)
+                states = self._tile_encode(x, y)
+                one_hot[np.arange(self._number_of_tiling), states] = 1
+                self._one_hot[(x, y)] = one_hot
+
+    def _tile_encode(self, x, y):
+        return np.array(
+            [self._tiling_states[tiling_index][int(np.digitize(x, grid[0])) - 1, int(np.digitize(y, grid[1])) - 1] for tiling_index, grid
+             in
+             self._tiling.items()])
+
+    def encode(self, x, y):
+        return self._one_hot[(x, y)]
 
     def visualize_tilings(self):
         """Plot each tiling as a grid."""
@@ -34,7 +56,7 @@ class Tiling:
         legend_lines = []
 
         fig, ax = plt.subplots(figsize=(10, 10))
-        for i, grid in enumerate(self._tiling):
+        for i, grid in self._tiling.items():
             for x in grid[0]:
                 l = ax.axvline(x=x, color=colors[i % len(colors)], linestyle=linestyles[i % len(linestyles)], label=i)
             for y in grid[1]:
