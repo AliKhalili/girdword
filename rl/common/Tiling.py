@@ -29,8 +29,8 @@ class Tiling:
         self._tiling = {tiling_index: self._create_tiling_grid(tiling_index) for tiling_index in
                         range(self._number_of_tiling)}
         self._tiling_states = {
-            tiling_index: np.arange((grid[0].shape[0] - 1) * (grid[1].shape[0] - 1)).reshape(
-                (grid[0].shape[0] - 1, grid[1].shape[0] - 1))
+            tiling_index: np.arange((grid[1].shape[0] - 1) * (grid[0].shape[0] - 1)).reshape(
+                (grid[1].shape[0] - 1, grid[0].shape[0] - 1))
             for
             tiling_index, grid in
             self._tiling.items()}
@@ -46,13 +46,13 @@ class Tiling:
 
     def _tile_encode(self, x, y):
         return np.array(
-            [self._tiling_states[tiling_index][int(np.digitize(x, grid[0])) - 1, int(np.digitize(y, grid[1])) - 1] for
+            [self._tiling_states[tiling_index][int(np.digitize(y, grid[1])) - 1,int(np.digitize(x, grid[0])) - 1] for
              tiling_index, grid
              in
              self._tiling.items()])
 
     def tile_size(self):
-        return self._one_hot.shape[1]
+        return self._number_of_tiling
 
     def ont_hot(self, x, y):
         return self._one_hot[(x, y)]

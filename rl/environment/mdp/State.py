@@ -35,9 +35,6 @@ class State:
         return f'{self._index} : {a}{"terminal" if self._is_terminal else ""}'
 
 
-all_actions = ["U", "R", "D", "L"]
-
-
 def states_parser(states_dict: dict, reward: int, height: int, width: int):
     if not isinstance(states_dict, dict):
         raise TypeError("input must be a dictionary")
@@ -56,9 +53,9 @@ def states_parser(states_dict: dict, reward: int, height: int, width: int):
         color = group_of_states_value.get("color", "lightgray")
         current_actions = []
         if "*" in group_of_states_value.keys():
-            current_actions = all_actions.copy()
+            current_actions = CNSTNT.ALL_ACTIONS.copy()
         else:
-            for default_action in all_actions:
+            for default_action in CNSTNT.ALL_ACTIONS:
                 if default_action in group_of_states_value.keys():
                     current_actions.append(default_action)
 
@@ -67,7 +64,7 @@ def states_parser(states_dict: dict, reward: int, height: int, width: int):
             if is_start:
                 start_state = new_state.index()
             if not is_terminal:
-                for action in all_actions:
+                for action in CNSTNT.ALL_ACTIONS:
                     if action not in current_actions:
                         new_state.add_action(action, reward, grid_move.get_next(action, new_state.index()))
                     else:
@@ -89,9 +86,9 @@ def states_parser(states_dict: dict, reward: int, height: int, width: int):
         index = np_it.iterindex
         if index not in states:
             new_state = State(int(index), False, CNSTNT.ACTION_COLORS["other"])
-            for action in all_actions:
+            for action in CNSTNT.ALL_ACTIONS:
                 new_state.add_action(action, reward, grid_move.get_next(action, new_state.index()))
             states[new_state.index()] = new_state
-        #print(states[index])
+        # print(states[index])
         np_it.iternext()
     return {key: states[key] for key in sorted(states)}, start_state, grid_move

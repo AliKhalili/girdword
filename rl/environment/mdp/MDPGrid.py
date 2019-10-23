@@ -37,6 +37,9 @@ class MDPGrid(MDP, Frame, Trajectory):
             super().add_trajectory(time_step, reward, super().state(), action_name, next_state)
         return next_state, reward, is_terminal, time_step
 
+    def get_position(self, state):
+        return self.grid_move.get_position(state)
+
     def render(self, time_step=None):
         if time_step is None:
             super().render(self.time())

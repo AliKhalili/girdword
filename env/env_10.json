@@ -1,9 +1,10 @@
 {
-  "width": 5,
-  "height": 5,
+  "width": 13,
+  "height": 13,
   "save_frame": true,
-  "terminals": [
-    0,
-    24
-  ]
+  "reward": -1,
+  "states": {
+    "0": {"start":true},
+    "168": {"terminal": true}
+  }
 }
