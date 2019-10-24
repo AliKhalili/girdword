@@ -35,30 +35,33 @@ class Tiling:
             tiling_index, grid in
             self._tiling.items()}
 
-        max_len = max([items.size for key, items in self._tiling_states.items()])
+        max_len = self._tile_size()
         for x in range(self._width):
             for y in range(self._height):
                 one_hot = np.zeros((self._number_of_tiling, max_len), dtype=int)
                 states = self._tile_encode(x, y)
                 one_hot[np.arange(self._number_of_tiling), states] = 1
-                self._one_hot[(x, y)] = one_hot
+                self._one_hot[(x, y)] = one_hot.flatten()
                 self._tiles[(x, y)] = states
 
     def _tile_encode(self, x, y):
         return np.array(
-            [self._tiling_states[tiling_index][int(np.digitize(y, grid[1])) - 1,int(np.digitize(x, grid[0])) - 1] for
+            [self._tiling_states[tiling_index][int(np.digitize(y, grid[1])) - 1, int(np.digitize(x, grid[0])) - 1] for
              tiling_index, grid
              in
              self._tiling.items()])
 
-    def tile_size(self):
-        return self._number_of_tiling
+    def _tile_size(self):
+        return max([items.size for key, items in self._tiling_states.items()])
+
+    def size(self):
+        return self._number_of_tiling * self._tile_size()
 
     def ont_hot(self, x, y):
         return self._one_hot[(x, y)]
 
-    def tiles(self, x, y):
-        return self._tiles[(x, y)]
+    # def tiles(self, x, y):
+    #     return self._tiles[(x, y)]
 
     def visualize_tilings(self):
         """Plot each tiling as a grid."""
