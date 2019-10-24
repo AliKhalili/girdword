@@ -11,8 +11,8 @@ from rl.environment.mdp.MDPGrid import MDPGrid
 alpha = 0.5 / 8
 gamma = 1
 epsilon = 0.1
-number_of_episode = 100
-number_of_run = 30
+number_of_episode = 500
+number_of_run = 1
 environment = MDPGrid(json_path=os.path.join(os.getcwd(), f'../env/env_10.json'))
 tiling = Tiling(environment.width, environment.height, number_of_tilling=4, bin=4, offset=(-3, -3))
 environment.render()
@@ -31,5 +31,6 @@ plt.xlabel('Episode')
 plt.ylabel('Step per episode')
 plt.legend()
 plt.show()
-# learner.evaluation()
+
+learner.evaluation()
 # environment.save()

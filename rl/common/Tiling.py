@@ -26,11 +26,9 @@ class Tiling:
         return grid
 
     def _create_tilings(self):
-        self._tiling = {tiling_index: self._create_tiling_grid(tiling_index) for tiling_index in
-                        range(self._number_of_tiling)}
+        self._tiling = {tiling_index: self._create_tiling_grid(tiling_index) for tiling_index in range(self._number_of_tiling)}
         self._tiling_states = {
-            tiling_index: np.arange((grid[1].shape[0] - 1) * (grid[0].shape[0] - 1)).reshape(
-                (grid[1].shape[0] - 1, grid[0].shape[0] - 1))
+            tiling_index: np.arange((grid[1].shape[0] - 1) * (grid[0].shape[0] - 1)).reshape((grid[1].shape[0] - 1, grid[0].shape[0] - 1))
             for
             tiling_index, grid in
             self._tiling.items()}

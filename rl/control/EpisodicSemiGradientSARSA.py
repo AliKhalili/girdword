@@ -55,3 +55,20 @@ class EpisodicSemiGradientSARSA(BaseControl):
 
     def save_model(self):
         np.savetxt(f'../result/{type(self).__name__}_W.txt', self.weight)
+
+    def load_model(self):
+        self.PI = np.loadtxt(f'../result/{type(self).__name__}_W.txt')
+
+    def evaluation(self, max_step=30):
+        self.load_model()
+        state = self.env.reset()
+        is_terminal = False
+        time = 0
+        while not is_terminal:
+            one_hot = self.decode_state(state)
+            action = np.argmax(self.get_action_value(one_hot))
+            state, reward, is_terminal, info = self.env.step(CNSTNT.ACTIONS_VALUES[action])
+            time += 1
+            if time >= max_step:
+                break
+        self.env.save(name=type(self).__name__)
