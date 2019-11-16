@@ -15,7 +15,7 @@ class EpisodicSemiGradientSARSA(BaseControl):
         self.tiling = tiling
 
     def run(self, number_of_episode):
-        runs = {}
+        episodes = {}
         for i in range(number_of_episode):
             one_hot = self.decode_state(self.env.reset())
             action = policy.epsilon_greedy(self.exploration_rate, self.action_space, self.get_action_value(one_hot))
@@ -35,10 +35,9 @@ class EpisodicSemiGradientSARSA(BaseControl):
                 one_hot = one_hot_next
                 action = action_next
             total_length, total_reward, _ = self.env.history()
-            #print(f'{i}:{total_length}')
-            runs[i] = (total_length, total_reward)
+            episodes[i] = (total_length, total_reward)
         self.save_model()
-        return runs
+        return episodes
 
     def get_action_value(self, one_hot, action=None):
         if action is None:

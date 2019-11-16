@@ -3,7 +3,7 @@ from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 
-
+#TODO:change to tiles
 class Tiling:
     def __init__(self, width: int, height: int, number_of_tilling: int, bin: float, offset: tuple):
         self._width = width

@@ -3,12 +3,12 @@ import numpy as np
 
 width, height = 13, 13
 tiling = Tiling(width, height, number_of_tilling=4, bin=4, offset=(-3, -3))
-# tiling.visualize_tilings()
+#tiling.visualize_tilings()
 
 state_number = 0
-print(f'{state_number}=i:{11},j:{5} > {tiling.tiles(11, 5)} ~~ {tiling.ont_hot(11, 5)}')
+# print(f'{state_number}=i:{11},j:{5} > {tiling.tiles(11, 5)} ~~ {tiling.ont_hot(11, 5)}')
 
-# for i in range(width):
-#     for j in range(height):
-#         print(f'{state_number}=i:{i},j:{j} > {tiling.tiles(i, j)} > {tiling.ont_hot(i, j)}')
-#         state_number += 1
+for i in range(width):
+    for j in range(height):
+        print(f'{state_number}=i:{i},j:{j} > {tiling.ont_hot(i, j)}')
+        state_number += 1

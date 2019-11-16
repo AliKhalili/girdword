@@ -5,17 +5,16 @@ import matplotlib.pyplot as plt
 
 from rl.common.Tiling import Tiling
 from rl.control.EpisodicSemiGradientSARSA import EpisodicSemiGradientSARSA
-from rl.control.QLearning import QLearning
 from rl.environment.mdp.MDPGrid import MDPGrid
 
-alpha = 0.5 / 8
+alpha = 0.8 / 3
 gamma = 1
 epsilon = 0.1
-number_of_episode = 500
+number_of_episode = 80
 number_of_run = 1
 environment = MDPGrid(json_path=os.path.join(os.getcwd(), f'../env/env_10.json'))
 tiling = Tiling(environment.width, environment.height, number_of_tilling=4, bin=4, offset=(-3, -3))
-environment.render()
+#environment.render()
 step_per_episode = np.zeros(number_of_episode)
 
 for run in tqdm(range(number_of_run)):
@@ -33,4 +32,3 @@ plt.legend()
 plt.show()
 
 learner.evaluation()
-# environment.save()

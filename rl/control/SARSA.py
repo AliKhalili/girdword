@@ -11,7 +11,7 @@ class SARSA(BaseControl):
         self.step_size = step_size
 
     def run(self, number_of_episode):
-        runs = {}
+        episodes_run = {}
         for i in range(number_of_episode):
             state = self.env.reset()
             action = policy.epsilon_greedy(self.exploration_rate, self.action_space, self.Q[state, :])
@@ -23,7 +23,7 @@ class SARSA(BaseControl):
                 state = state_next
                 action = action_next
             total_length, total_reward, _ = self.env.history()
-            runs[i] = (total_length, total_reward)
+            episodes_run[i] = (total_length, total_reward)
         self.PI = np.argmax(self.Q, axis=1)
         super().save_model()
-        return runs
+        return episodes_run

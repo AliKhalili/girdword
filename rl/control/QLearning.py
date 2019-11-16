@@ -11,7 +11,7 @@ class QLearning(BaseControl):
         self.step_size = step_size
 
     def run(self, number_of_episode):
-        runs = {}
+        episodes_log = {}
         for i in range(number_of_episode):
             state = self.env.reset()
             is_terminal = False
@@ -21,7 +21,7 @@ class QLearning(BaseControl):
                 self.Q[state, action] += self.step_size * (reward + self.discount_factor * self.Q[state_next, :].max() - self.Q[state, action])
                 state = state_next
             total_length, total_reward, _ = self.env.history()
-            runs[i] = (total_length, total_reward)
+            episodes_log[i] = (total_length, total_reward)
         self.PI = np.argmax(self.Q, axis=1)
         super().save_model()
-        return runs
+        return episodes_log

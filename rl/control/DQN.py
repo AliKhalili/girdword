@@ -21,7 +21,7 @@ class DQN(BaseControl):
         self.step_size = step_size
         self.learning_rate = learning_rate
         self._model = self.build_model()
-        self._batch_size = 128
+        self._batch_size = 32
         self._memory = deque(maxlen=2000)
 
     def run(self, number_of_episode):
@@ -39,6 +39,7 @@ class DQN(BaseControl):
 
             total_length, total_reward, _ = self.env.history()
             runs[i] = (total_length, total_reward)
+            print(f'{i}:{total_reward}')
         self.save_model()
         return runs
 
@@ -54,8 +55,8 @@ class DQN(BaseControl):
 
     def build_model(self):
         model = Sequential()
-        model.add(Dense(24, input_dim=2, activation='relu', kernel_initializer='he_uniform'))
-        model.add(Dense(24, activation='relu', kernel_initializer='he_uniform'))
+        model.add(Dense(32, input_dim=2, activation='relu', kernel_initializer='he_uniform'))
+        model.add(Dense(32, activation='relu', kernel_initializer='he_uniform'))
         model.add(Dense(self.action_space, activation='linear', kernel_initializer='he_uniform'))
         model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
         return model
@@ -67,7 +68,7 @@ class DQN(BaseControl):
         for transition in batch:
             target = transition.reward
             if not transition.done:
-                target = transition.reward + self.discount_factor * np.max(self.get_action_value(transition.next_state))
+                target = transition.reward + self.discount_factor * self.get_action_value(transition.next_state).max()
             target_f = self._model.predict(self.decode_state(transition.state))
             target_f[0][transition.action] = target
             self._model.fit(self.decode_state(transition.state), target_f, epochs=1, verbose=0)
