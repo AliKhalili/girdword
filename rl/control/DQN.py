@@ -36,7 +36,7 @@ class DQN(BaseControl):
                 self.add_transition(state, action, reward, next_state, is_terminal)
                 state = next_state
                 self.optimize_model()
-
+                #print(f'{state},{next_state}')
             total_length, total_reward, _ = self.env.history()
             runs[i] = (total_length, total_reward)
             print(f'{i}:{total_reward}')
@@ -68,7 +68,7 @@ class DQN(BaseControl):
         for transition in batch:
             target = transition.reward
             if not transition.done:
-                target = transition.reward + self.discount_factor * self.get_action_value(transition.next_state).max()
+                target = transition.reward + self.discount_factor * np.amax(self.get_action_value(transition.next_state))
             target_f = self._model.predict(self.decode_state(transition.state))
             target_f[0][transition.action] = target
             self._model.fit(self.decode_state(transition.state), target_f, epochs=1, verbose=0)
@@ -79,7 +79,7 @@ class DQN(BaseControl):
     def load_model(self):
         self._model = load_model(f'../result/{type(self).__name__}_Weights.h5')
 
-    def evaluation(self, max_step=20):
+    def evaluation(self, max_step=50):
         self.load_model()
         state = self.env.reset()
         is_terminal = False
