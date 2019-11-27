@@ -13,6 +13,7 @@ class Frame:
         self._cmap = colors.ListedColormap(CNSTNT.COLORS.keys())
         bounds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         self._norm = colors.BoundaryNorm(bounds, self._cmap.N)
+        self._last_time_step = 0
 
     def reset(self):
         self._frame = {}
@@ -20,6 +21,10 @@ class Frame:
     def add_frame(self, time_step: int, frame):
         if self.save_frame:
             self._frame[time_step] = frame
+            self._last_time_step = time_step
+
+    def get_last_frame(self):
+        return self._frame[self._last_time_step]
 
     def render(self, time_step):
         if self.save_frame:

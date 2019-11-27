@@ -8,10 +8,11 @@ alpha = 0.1
 gamma = 0.9
 learning_rate = 0.001
 epsilon = 0.1
-number_of_episode = 100
+number_of_episode = 200
 
 environment = MDPGrid(json_path=os.path.join(os.getcwd(), f'../env/env_10.json'))
+#environment.render()
 learner = DQN(environment, discount_factor=gamma, exploration_rate=epsilon, step_size=alpha, learning_rate=learning_rate)
-#learner.run(number_of_episode)
-learner.evaluation()
-environment.save()
+learner.run(number_of_episode)
+#learner.evaluation()
+#environment.save()
